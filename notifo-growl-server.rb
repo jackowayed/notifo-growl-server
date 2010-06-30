@@ -18,7 +18,7 @@ end
 post '/flush' do
   notifications = DB[:notifications]
 
-  id = notifications.last.id
+  id = notifications.order(:id).last.id
   notifications.each do |n|
     send_notification YAML::load(n)
   end

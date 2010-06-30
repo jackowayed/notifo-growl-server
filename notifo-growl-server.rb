@@ -11,6 +11,7 @@ end
 
 post '/' do
   send_notification params
+  "ok"
 end
 
 post '/flush' do
@@ -22,6 +23,7 @@ post '/flush' do
   end
 
   DB[:notifications].filter('id <= ?', id).delete
+  "ok"
 end
 
 

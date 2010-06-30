@@ -2,6 +2,7 @@ require 'net/http'
 require 'uri'
 require 'sequel'
 require 'timeout'
+require 'yaml'
 
 DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://notifo.db')
 
@@ -19,7 +20,7 @@ post '/flush' do
 
   id = notifications.last.id
   notifications.each do |n|
-    send_notification Marshal.load(n)
+    send_notification YAML::load(n)
   end
 
   DB[:notifications].filter('id <= ?', id).delete
@@ -33,6 +34,6 @@ def send_notification(hash)
       Net::HTTP.post_form(URI.parse('http://jackowayed-notifo.oncloud.org/'), hash)
     end
   rescue Timeout::Error
-    DB[:notifications].insert(:params_hash => Marshal.dump(params))
+    DB[:notifications].insert(:params_hash => YAML::dump(params))
   end
 end

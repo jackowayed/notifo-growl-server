@@ -18,9 +18,9 @@ end
 post '/flush' do
   notifications = DB[:notifications]
 
-  id = notifications.order(:id).last.id
+  id = notifications.order(:id).last[:id]
   notifications.each do |n|
-    send_notification YAML::load(n)
+    send_notification YAML::load(n[:params_hash])
   end
 
   DB[:notifications].filter('id <= ?', id).delete

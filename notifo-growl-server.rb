@@ -1,11 +1,5 @@
-require 'httparty'
-
-class Mac
-  include HTTParty
-  base_uri 'jackowayed-notifo.oncloud.org'
-end
-
-
+require 'net/http'
+require 'uri'
 
 get '/' do
   "working"
@@ -14,5 +8,5 @@ end
 post '/' do
   # TODO confirm the signature
 
-  Mac.post('/', :query => params)
+  Net::HTTP.post_form(URI.parse('http://jackowayed-notifo.oncloud.org/'), params)
 end

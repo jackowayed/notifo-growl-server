@@ -9,13 +9,7 @@ get '/' do
 end
 
 post '/' do
-  # TODO confirm the signature
-
-  begin
-    send_notification params
-  rescue
-    DB[:notifications].insert(:params_hash => Marshal.dump(params))
-  end
+  send_notification params
 end
 
 post '/flush' do
@@ -31,5 +25,9 @@ end
 
 
 def send_notification(hash)
-  Net::HTTP.post_form(URI.parse('http://jackowayed-notifo.oncloud.org/'), hash)
+  begin
+    Net::HTTP.post_form(URI.parse('http://jackowayed-notifo.oncloud.org/'), hash)
+  rescue
+    DB[:notifications].insert(:params_hash => Marshal.dump(params))
+  end
 end

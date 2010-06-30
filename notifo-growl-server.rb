@@ -1,5 +1,7 @@
+require 'httparty'
+
 class Mac
-  include HTTPParty
+  include HTTParty
   base_uri 'jackowayed-notifo.oncloud.org'
 end
 

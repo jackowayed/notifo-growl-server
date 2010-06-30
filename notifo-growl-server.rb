@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'sequel'
+require 'timeout'
 
 DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://notifo.db')
 
@@ -26,8 +27,10 @@ end
 
 def send_notification(hash)
   begin
-    Net::HTTP.post_form(URI.parse('http://jackowayed-notifo.oncloud.org/'), hash)
-  rescue
+    Timeout::timeout(5) do
+      Net::HTTP.post_form(URI.parse('http://jackowayed-notifo.oncloud.org/'), hash)
+    end
+  rescue Timeout::Error
     DB[:notifications].insert(:params_hash => Marshal.dump(params))
   end
 end

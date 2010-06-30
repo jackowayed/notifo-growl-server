@@ -14,9 +14,5 @@ end
 post '/' do
   # TODO confirm the signature
 
-  app = params[:notifo_service]
-  title = params[:notifo_title]
-  text = params[:notifo_message]
-
-  Mac.post('/', :query => { :app => app, :title => title, :text => text })
+  Mac.post('/', :query => params)
 end

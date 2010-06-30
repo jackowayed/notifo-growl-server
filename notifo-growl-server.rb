@@ -5,6 +5,10 @@ end
 
 
 
+get '/' do
+  "working"
+end
+
 post '/' do
   # TODO confirm the signature
 
